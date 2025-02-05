@@ -9,7 +9,7 @@ const results = document.getElementById("results");
 let movies = []
 
 searchButton.addEventListener("click", () => {
-    alert("you click meeeeeeeeeeeeee")
+    searchMovies();
 })
 
 
@@ -27,6 +27,24 @@ function fetchPopularMovies() {
 }
 
 
+
+function searchMovies() {
+    url = `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&language=en-US&query=${searchInput.value}&page=1&include_adult=false`;
+
+    let response = fetch(url);
+
+
+    response.then(async (data) => {
+        let fetchedData = await data.json();
+
+        results.innerHTML = "";
+
+        movies = fetchedData.results;
+        displayMovies();
+    })
+}
+
+
 function displayMovies() {
     for (let i = 0; i < movies.length; i++) {
         renderMovies(movies[i]);
@@ -35,6 +53,9 @@ function displayMovies() {
 
 
 function renderMovies(movie){
+
+    let a = document.createElement("a");
+    a.href = `movie.html?id=${movie.id}`;
     let card = document.createElement("div");
     let img = document.createElement("img");
     let title = document.createElement("h2");
@@ -47,7 +68,9 @@ function renderMovies(movie){
     card.appendChild(img);
     card.appendChild(title);
 
-    results.appendChild(card);
+    a.appendChild(card);
+
+    results.appendChild(a);
 
 }
 
